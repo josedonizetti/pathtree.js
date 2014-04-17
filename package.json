@@ -1,0 +1,26 @@
+{
+  "name": "pathtree.js",
+  "version": "0.0.1",
+  "description": "PathTree is a router",
+  "main": "lib/pathtree.js",
+  "scripts": {
+    "test": "make test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:josedonizetti/pathtree.js.git"
+  },
+  "keywords": [
+    "framework",
+    "web",
+    "router"
+  ],
+  "author": "Jose Donzietti",
+  "bugs": {
+    "url": "https://github.com/josedonizetti/pathtree.js/issues"
+  },
+  "devDependencies": {
+    "mocha": "1.x",
+    "nodemon": "1.x"
+  }
+}
