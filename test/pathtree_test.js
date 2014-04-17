@@ -1,56 +1,55 @@
 var assert = require('assert'),
-    PathTree = require('../lib/pathtree').PathTree
+    Router = require('../lib/pathtree').Router
 
 describe('Pathtree', function() {
   it('basic route', function() {
-    var pathTree = new PathTree()
+    var router = new Router()
 
-    pathTree.add("/", 0)
-    pathTree.add("/path", 1)
-    pathTree.add("/path/to", 2)
+    router.add("/", 0)
+    router.add("/path", 1)
+    router.add("/path/to", 2)
 
-    var leaf = pathTree.find("/")
-    assert.equal(leaf.value, 0)
+    var route = router.find("/")
+    assert.equal(route.value, 0)
 
-    leaf = pathTree.find("/path")
-    assert.equal(leaf.value, 1)
+    route = router.find("/path")
+    assert.equal(route.value, 1)
 
-    leaf = pathTree.find("/path/to")
-    assert.equal(leaf.value, 2)
+    route = router.find("/path/to")
+    assert.equal(route.value, 2)
   })
 
 
   it('named parameters', function() {
-    var pathTree = new PathTree()
+    var router = new Router()
 
-    pathTree.add("/:controller", 0)
-    pathTree.add("/:controller/:action", 1)
-    pathTree.add("/:controller/:action/:id", 2)
+    router.add("/:controller", 0)
+    router.add("/:controller/:action", 1)
+    router.add("/:controller/:action/:id", 2)
 
+    var route = router.find("/controller")
+    assert.equal(route.value, 0)
+    assert.equal(route.exp, "controller")
 
-    var leaf = pathTree.find("/controller")
-    assert.equal(leaf.value, 0)
-    assert.equal(leaf.exp, "controller")
+    route = router.find("/p")
+    assert.equal(route.value, 0)
+    assert.equal(route.exp, "p")
 
-    leaf = pathTree.find("/p")
-    assert.equal(leaf.value, 0)
-    assert.equal(leaf.exp, "p")
+    route = router.find("/controller/action")
+    assert.equal(route.value, 1)
+    assert.deepEqual(route.exp, ["controller", "action"])
 
-    leaf = pathTree.find("/controller/action")
-    assert.equal(leaf.value, 1)
-    assert.deepEqual(leaf.exp, ["controller", "action"])
+    leaf = router.find("/c/a")
+    assert.equal(route.value, 1)
+    assert.deepEqual(route.exp, ["c", "a"])
 
-    leaf = pathTree.find("/c/a")
-    assert.equal(leaf.value, 1)
-    assert.deepEqual(leaf.exp, ["c", "a"])
+    route = router.find("/controller/action/id")
+    assert.equal(route.value, 2)
+    assert.deepEqual(route.exp, ["controller", "action", "id"])
 
-    leaf = pathTree.find("/controller/action/id")
-    assert.equal(leaf.value, 2)
-    assert.deepEqual(leaf.exp, ["controller", "action", "id"])
-
-    leaf = pathTree.find("/t/t/1")
-    assert.equal(leaf.value, 2)
-    assert.deepEqual(leaf.exp, ["t", "t", "1"])
+    route = router.find("/t/t/1")
+    assert.equal(route.value, 2)
+    assert.deepEqual(route.exp, ["t", "t", "1"])
   })
 
 })
